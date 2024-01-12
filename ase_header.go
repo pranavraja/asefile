@@ -434,7 +434,8 @@ func (tagsChunk *AsepriteTagsChunk2018) AddUserData(userDat AsepriteUserDataChun
 type AsepriteTagsChunk2018Tag struct {
 	FromFrame, ToFrame uint16
 	LoopAnimDirection  byte
-	reserved2          [8]byte
+	Repeats            uint16
+	reserved2          [6]byte
 	TagColor           [3]byte // deprecated
 	ExtraByte          byte    // (zero)
 	TagName            string
