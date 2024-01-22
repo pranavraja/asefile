@@ -112,6 +112,7 @@ type AsepriteFrame struct {
 	Tags                      AsepriteTagsChunk2018
 	Palettes                  []AsepritePaletteChunk2019
 	Slices                    []AsepriteSliceChunk2022
+	Tilesets                  []AsepriteTilesetChunk2023
 }
 
 /**

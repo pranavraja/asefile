@@ -174,12 +174,17 @@ func (aseFrame *AsepriteFrame) Decode(r io.Reader) error {
 			aseFrame.Slices = append(aseFrame.Slices, sliceDat)
 			lastUserdatHolder = &aseFrame.Slices[len(aseFrame.Slices)-1]
 			read += 1
+		case 0x2023:
+			var tileset AsepriteTilesetChunk2023
+			tileset.Decode(r)
+			aseFrame.Tilesets = append(aseFrame.Tilesets, tileset)
+			read += 1
 		default:
 			log.Printf("Unused chunk type: %X\n", chunkType)
 		}
 	}
 	if read != loadChunks {
-		return fmt.Errorf("did not read expected amount of chunks")
+		return fmt.Errorf("did not read expected amount of chunks: expected %d, got %d", loadChunks, read)
 	}
 	return nil
 }
@@ -327,7 +332,10 @@ func (aseCelChunk *AsepriteCelChunk2005) Decode(r io.Reader) {
 		binary.Read(r, ble, &aseCelChunk.BitMaskForYFlip)
 		binary.Read(r, ble, &aseCelChunk.BitMaskFor90CWRot)
 		binary.Read(r, ble, &aseCelChunk.reserved)
-		zreader, err := zlib.NewReader(r)
+		bytesToRead := aseCelChunk.chunkSize - 54
+		bytesBuff := make([]byte, bytesToRead)
+		binary.Read(r, ble, bytesBuff)
+		zreader, err := zlib.NewReader(bytes.NewReader(bytesBuff))
 		if err != nil {
 			log.Println(err)
 		}
