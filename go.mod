@@ -1,4 +1,4 @@
-module github.com/Racinettee/asefile
+module github.com/pranavraja/asefile
 
 go 1.17
 
